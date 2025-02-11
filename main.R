@@ -50,3 +50,31 @@ ricavi_totali <- rowSums(ricavi[, 2:8])
 
 barplot(vendite_totali)
 barplot(ricavi_totali)
+
+# Correlazione 1
+cor(vendite$servizi, vendite$componenti, use = "complete.obs")
+
+# Correlazione 2
+cor(rowSums(vendite [, 2:4]), vendite$accessori, use = "complete.obs")
+
+# Correlazione 3
+cor(ricavi$servizi, ricavi$componenti, use = "complete.obs")
+
+# Plotting correlation idexes - dispersion plots
+plot(vendite$servizi, vendite$componenti, 
+     main = "Vendite: Servizi vs Componenti",
+     xlab = "Vendite Servizi", 
+     ylab = "Vendite Componenti", 
+     pch = 16)
+
+plot(rowSums(vendite[, 2:4]), vendite$accessori, 
+     main = "Totale Trekking, MTB, Strada vs Vendite Accessori",
+     xlab = "Totale Trekking + MTB + Strada", 
+     ylab = "Vendite Accessori", 
+     pch = 16)
+
+plot(ricavi$servizi, ricavi$componenti, 
+     main = "Ricavi: Servizi vs Componenti",
+     xlab = "Ricavi Servizi", 
+     ylab = "Ricavi Componenti", 
+     pch = 16)
