@@ -48,8 +48,27 @@ print(ricavi_summary)
 vendite_totali <- rowSums(alldata[, 2:9])
 ricavi_totali <- rowSums(ricavi[, 2:8])
 
-barplot(vendite_totali)
-barplot(ricavi_totali)
+plot(vendite_totali,
+    type = "h",
+    lwd = 7,
+    col = "darkgray",
+    main = "Vendite totali per settimana",
+    xlab = "Settimane",
+    ylab = "Volume di vendite")
+
+plot(ricavi_totali,
+     type = "h",
+     lwd = 7,
+     col = "darkgray",
+     main = "Ricavi totali per settimana",
+     xlab = "Settimane",
+     ylab = "Ricavi")
+
+# Boxplot for outliners
+
+boxplot(vendite_totali, horizontal = TRUE, main = "Vendite totali per settimana")
+
+boxplot(ricavi_totali, horizontal = TRUE, main = "Ricavi totali per settimana")
 
 # Correlazione 1
 cor(vendite$servizi, vendite$componenti, use = "complete.obs")
@@ -78,3 +97,26 @@ plot(ricavi$servizi, ricavi$componenti,
      xlab = "Ricavi Servizi", 
      ylab = "Ricavi Componenti", 
      pch = 16)
+
+# Aggregare colonno per il test di ipotesi
+vendite_assistenza <- vendite$`componenti-assistenza` + vendite$servizi
+ricavi_assistenza <- ricavi$servizi
+
+# Segmentazione delle settimane (alta e bassa assistenza)
+mediana_assistenza <- median(vendite_assistenza)
+gruppo_assistenza <- ifelse(vendite_assistenza > mediana_assistenza, "Alta", "Bassa")
+
+# Aggregazione tra i due gruppi
+aggregate(vendite$componenti ~ gruppo_assistenza, FUN = mean)
+aggregate(vendite$componenti ~ gruppo_assistenza, FUN = sd)
+
+# t-test per verificare 
+t.test(vendite$componenti[gruppo_assistenza == "Alta"],
+       vendite$componenti[gruppo_assistenza == "Bassa"])
+
+# t-test per verificare 
+boxplot(vendite$componenti ~ vendite_assistenza, 
+        main = "Distribuzione delle vendite di componenti in base all'assistenza",
+        xlab = "Livello di Assistenza",
+        ylab = "Vendite di Componenti",
+        notch = TRUE)
